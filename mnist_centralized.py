@@ -1,11 +1,11 @@
 import torch
 import utils
-
 from datasets import load_dataset
 import time
 import torch.nn as nn
 import torch.nn.functional as F
 
+NUM_EPOCHS = 3
 
 class Net(nn.Module):
     def __init__(self, num_classes: int) -> None:
@@ -26,7 +26,6 @@ class Net(nn.Module):
         x = self.fc3(x)
         return x
     
-
 def train(net, trainloader, optimizer, device="cpu"):
     """Train the network on the training set."""
     criterion = torch.nn.CrossEntropyLoss()
@@ -55,44 +54,42 @@ def test(net, testloader, device):
     accuracy = correct / len(testloader.dataset)
     return loss, accuracy
 
-
 def run_centralised(
             trainloader, testloader, epochs: int, lr: float, momentum: float = 0.9
-      ):
-      """A minimal (but complete) training loop"""
-      # Discover device
-      DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-      print("#"*50)
-      print("Centralized PyTorch training (MNIST)")
-      print("#"*50)
-      print(f"Start training(via {DEVICE.type.upper()})")
-      # instantiate the model
-      model = Net(num_classes=10)
-      model.to(DEVICE)
-      # define optimiser with hyperparameters supplied
-      optim = torch.optim.SGD(model.parameters(), lr=lr)
-      # train for the specified number of epochs
-      for e in range(epochs):
-          print(f"Training epoch {e} ...")
-          train(model, trainloader, optim, DEVICE)    
-      # training is completed, then evaluate model on the test set
-      print("Evaluate model")
-      loss, accuracy = test(model, testloader, DEVICE)
-      print(f"Loss: {loss:.3f} ")
-      print(f"Accuracy: {accuracy:.3f} ")
-
+    ):
+    """A minimal (but complete) training loop"""
+    # Discover device
+    DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print("#"*50)
+    print("Centralized PyTorch training (MNIST)")
+    print("#"*50)
+    print(f"Start training(via {DEVICE.type.upper()})")
+    # instantiate the model
+    model = Net(num_classes=10)
+    model.to(DEVICE)
+    # define optimiser with hyperparameters supplied
+    optim = torch.optim.SGD(model.parameters(), lr=lr)
+    # train for the specified number of epochs
+    for e in range(epochs):
+        print(f"Training epoch {e} ...")
+        train(model, trainloader, optim, DEVICE)    
+    # training is completed, then evaluate model on the test set
+    print("Evaluate model")
+    loss, accuracy = test(model, testloader, DEVICE)
+    print(f"Loss: {loss:.3f} ")
+    print(f"Accuracy: {accuracy:.3f} ")
 
 def main():
-      # Construct dataloaders
-      # Download dataset
-      print("Load data")
-      mnist = load_dataset("ylecun/mnist")
-      trainloader, testloader = utils.get_mnist_dataloaders(mnist, batch_size=32)
-      start_time = time.time()
-      # Run the centralised training
-      run_centralised(trainloader, testloader, epochs=3, lr=0.01)
-      elapsed_time = time.time() - start_time
-      print(f"Total running time: {elapsed_time:.2f} seconds")
+    # Construct dataloaders
+    # Download dataset
+    print("Load data")
+    mnist = load_dataset("ylecun/mnist")
+    trainloader, testloader = utils.get_mnist_dataloaders(mnist, batch_size=32)
+    start_time = time.time()
+    # Run the centralised training
+    run_centralised(trainloader, testloader, epochs=NUM_EPOCHS, lr=0.01)
+    elapsed_time = time.time() - start_time
+    print(f"Total running time: {elapsed_time:.2f} seconds")
 
 if __name__ == "__main__":
     main()

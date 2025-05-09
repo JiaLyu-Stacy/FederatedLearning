@@ -8,6 +8,7 @@ from torchvision.datasets import CIFAR10
 import os
 
 DATA_ROOT = "./data/"
+NUM_EPOCHS = 10
 
 class Net(nn.Module):
     def __init__(self) -> None:
@@ -18,6 +19,7 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
+
     def forward(self, x: Tensor) -> Tensor:
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
@@ -26,7 +28,6 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-    
 
 def load_data() -> Tuple[
     torch.utils.data.DataLoader, 
@@ -90,6 +91,7 @@ def train(
                                                 i + 1, 
                                                 running_loss / 2000))
                 running_loss = 0.0
+
 def test(
         net: Net,
         testloader: torch.utils.data.DataLoader,
@@ -130,7 +132,7 @@ def main():
     trainloader, testloader, _ = load_data()
     print(f"Start training(via {DEVICE.type.upper()})")
     net=Net().to(DEVICE)
-    train(net=net, trainloader=trainloader, epochs=5, lr=0.01, device=DEVICE)
+    train(net=net, trainloader=trainloader, epochs=NUM_EPOCHS, lr=0.01, device=DEVICE)
     print("Evaluate model")
     loss, accuracy = test(net=net, testloader=testloader, device=DEVICE)
     print(f"Loss: {loss:.3f} ")
