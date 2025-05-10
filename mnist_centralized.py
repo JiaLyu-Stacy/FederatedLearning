@@ -1,3 +1,5 @@
+import json
+import os
 import torch
 import utils
 from datasets import load_dataset
@@ -78,18 +80,45 @@ def run_centralised(
     loss, accuracy = test(model, testloader, DEVICE)
     print(f"Loss: {loss:.3f} ")
     print(f"Accuracy: {accuracy:.3f} ")
+    return loss, accuracy
 
 def main():
     # Construct dataloaders
     # Download dataset
     print("Load data")
-    mnist = load_dataset("ylecun/mnist")
+    mnist = load_dataset("ylecun/mnist")  # 60000 training samples, 10000 test samples
     trainloader, testloader = utils.get_mnist_dataloaders(mnist, batch_size=32)
     start_time = time.time()
     # Run the centralised training
-    run_centralised(trainloader, testloader, epochs=NUM_EPOCHS, lr=0.01)
+    loss, accuracy = run_centralised(trainloader, testloader, epochs=NUM_EPOCHS, lr=0.01)
     elapsed_time = time.time() - start_time
     print(f"Total running time: {elapsed_time:.2f} seconds")
+    print("Finished training")
+    # Save NUM_EPOCHS and elapsed_time to a file
+    metadata = {
+        "run_time": f"{round(elapsed_time, 2)} seconds",
+        "final_loss": round(loss, 2),
+        "final_accuracy": accuracy,
+        "batch_size": 32,
+        "learning_rate": 0.01,
+        "num_epochs": NUM_EPOCHS,
+    }
+    # Check if the file exists
+    output_file = "./output/mnist_centralized.json"
+    if os.path.exists(output_file):
+        # If the file exists, read the existing data, append, and save
+        with open(output_file, "r") as f:
+            existing_data = json.load(f)
+        # Append new data
+        existing_data.append(metadata)
+        # Save the combined data back to the file
+        with open(output_file, "w") as f:
+            json.dump(existing_data, f, indent=2)
+    else:
+        # If the file doesn't exist, create a new one with the combined data
+        with open(output_file, "w") as f:
+            json.dump([metadata], f, indent=2)
+
 
 if __name__ == "__main__":
     main()

@@ -20,8 +20,8 @@ from datasets import load_dataset
 from flwr.simulation import run_simulation
 import os
 
-NUM_ROUNDS = 50
-NUM_PARTITIONS = 100
+NUM_ROUNDS = 10 # Number of rounds of training
+NUM_PARTITIONS = 100 # Number of clients
 FRACTION_FIT = 0.1  # 10% clients sampled each round to do fit()
 FRACTION_EVALUATION = 0.25  # 25% clients sampled each round to do evaluate()
 
@@ -154,7 +154,6 @@ class FlowerClient(NumPyClient):
         train(self.model, self.trainloader, optim, self.device)
         # return the model parameters to the server as well as extra info (number of training examples in this case)
         return get_params(self.model), len(self.trainloader), {}
-
     def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
         """Evaluate the model sent by the server on this client's
         local validation set. Then return performance metrics."""
@@ -234,3 +233,30 @@ run_simulation(
 end_time = time.time()
 elapsed_time = end_time - start_time
 print(f"Total running time: {elapsed_time:.2f} seconds")
+# Save the results to json
+# Define metadata
+metadata = {
+    "run_time": f"{round(elapsed_time, 2)} seconds",
+    "num_clients": NUM_PARTITIONS,
+    "num_rounds": NUM_ROUNDS,
+    "fraction_fit": FRACTION_FIT,
+    "fraction_evaluate": FRACTION_EVALUATION,
+}
+# Combine metadata with results
+#combined_data = {**metadata, **results}
+# Check if the file exists
+output_file = "./output/mnist_decentralized_fedavgcustom.json"
+if os.path.exists(output_file):
+    # If the file exists, read the existing data, append, and save
+    with open(output_file, "r") as f:
+        existing_data = json.load(f)
+    # Append new data
+    existing_data.append(metadata)
+    # Save the combined data back to the file
+    with open(output_file, "w") as f:
+        json.dump(existing_data, f, indent=2)
+else:
+    # If the file doesn't exist, create a new one with the combined data
+    with open(output_file, "w") as f:
+        json.dump([metadata], f, indent=2)
+
