@@ -60,9 +60,9 @@ else:
     
 #########################################################
 
-fedavgcustom_path = f"./output/mnist_decentralized_fedavgcustom({config_type}_P{num_partitions_list}).json"
-performance_path = f"./output/mnist_decentralized_performance({config_type}_P{num_partitions_list}).json"
-result_path = f"./output/mnist_decentralized_result({config_type}_P{num_partitions_list}).json"
+fedavgcustom_path = f"./output/mnist_decentralized_fedavgcustom({config_type}_P{num_partitions_list[0]}).json"
+performance_path = f"./output/mnist_decentralized_performance({config_type}_P{num_partitions_list[0]}).json"
+result_path = f"./output/mnist_decentralized_result({config_type}_P{num_partitions_list[0]}).json"
 
 #if os.path.exists(fedavgcustom_path):
 #    os.remove(fedavgcustom_path)
