@@ -1,0 +1,18 @@
+[
+  {
+    "run_time": "30.44 seconds",
+    "final_loss": 23.64,
+    "final_accuracy": 0.975,
+    "batch_size": 32,
+    "learning_rate": 0.01,
+    "num_epochs": 3
+  },
+  {
+    "run_time": "39.74 seconds",
+    "final_loss": 19.07,
+    "final_accuracy": 0.9803,
+    "batch_size": 32,
+    "learning_rate": 0.01,
+    "num_epochs": 3
+  }
+]

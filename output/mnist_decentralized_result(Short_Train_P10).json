@@ -1,0 +1,90 @@
+[
+  {
+    "run_time": "24.96 seconds",
+    "num_clients": 10,
+    "num_rounds": 3,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 31.631,
+    "metrics": {
+      "accuracy": 0.9681
+    }
+  },
+  {
+    "run_time": "35.47 seconds",
+    "num_clients": 10,
+    "num_rounds": 5,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 22.378,
+    "metrics": {
+      "accuracy": 0.9761
+    }
+  },
+  {
+    "run_time": "61.35 seconds",
+    "num_clients": 10,
+    "num_rounds": 10,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 16.294,
+    "metrics": {
+      "accuracy": 0.9831
+    }
+  },
+  {
+    "run_time": "101.39 seconds",
+    "num_clients": 10,
+    "num_rounds": 20,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 11.363,
+    "metrics": {
+      "accuracy": 0.989
+    }
+  },
+  {
+    "run_time": "150.54 seconds",
+    "num_clients": 10,
+    "num_rounds": 30,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 8.251,
+    "metrics": {
+      "accuracy": 0.9907
+    }
+  },
+  {
+    "run_time": "254.75 seconds",
+    "num_clients": 10,
+    "num_rounds": 50,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 10.876,
+    "metrics": {
+      "accuracy": 0.9901
+    }
+  },
+  {
+    "run_time": "468.4 seconds",
+    "num_clients": 10,
+    "num_rounds": 100,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 12.354,
+    "metrics": {
+      "accuracy": 0.9907
+    }
+  },
+  {
+    "run_time": "940.79 seconds",
+    "num_clients": 10,
+    "num_rounds": 200,
+    "fraction_fit": 0.5,
+    "fraction_evaluate": 0.5,
+    "loss": 18.561,
+    "metrics": {
+      "accuracy": 0.9905
+    }
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "run_time": "147.47 seconds",
+    "final_loss": 352.61,
+    "final_accuracy": 0.5961,
+    "batch_size": 32,
+    "learning_rate": 0.01,
+    "num_epochs": 10
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "run_time": "28.15 seconds",
+    "num_clients": 100,
+    "num_rounds": 3,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "41.83 seconds",
+    "num_clients": 100,
+    "num_rounds": 5,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "68.82 seconds",
+    "num_clients": 100,
+    "num_rounds": 10,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "121.56 seconds",
+    "num_clients": 100,
+    "num_rounds": 20,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "179.13 seconds",
+    "num_clients": 100,
+    "num_rounds": 30,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "302.56 seconds",
+    "num_clients": 100,
+    "num_rounds": 50,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "588.71 seconds",
+    "num_clients": 100,
+    "num_rounds": 100,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  },
+  {
+    "run_time": "1176.04 seconds",
+    "num_clients": 100,
+    "num_rounds": 200,
+    "fraction_fit": 0.8,
+    "fraction_evaluate": 0.2
+  }
+]

@@ -1,3 +1,4 @@
+import time
 from typing import Tuple, Dict
 import torch
 import torch.nn as nn
@@ -6,6 +7,8 @@ import torchvision.transforms as transforms
 from torch import Tensor
 from torchvision.datasets import CIFAR10
 import os
+
+import utils
 
 DATA_ROOT = "./data/"
 NUM_EPOCHS = 10
@@ -131,12 +134,23 @@ def main():
     print("Load data")
     trainloader, testloader, _ = load_data()
     print(f"Start training(via {DEVICE.type.upper()})")
+    start_time = time.time()
     net=Net().to(DEVICE)
     train(net=net, trainloader=trainloader, epochs=NUM_EPOCHS, lr=0.01, device=DEVICE)
     print("Evaluate model")
     loss, accuracy = test(net=net, testloader=testloader, device=DEVICE)
     print(f"Loss: {loss:.3f} ")
     print(f"Accuracy: {accuracy:.3f} ")
+    output_file = "./output/cifar_centralized.json"
+    metadata = {
+            "run_time": f"{round(time.time() - start_time, 2)} seconds",
+            "final_loss": round(loss, 2),
+            "final_accuracy": accuracy,
+            "batch_size": 32,
+            "learning_rate": 0.01,
+            "num_epochs": NUM_EPOCHS,
+    }
+    utils.store_result(metadata, output_file)
 
 if __name__ == "__main__":
     main()

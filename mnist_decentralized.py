@@ -20,13 +20,35 @@ from datasets import load_dataset
 from flwr.simulation import run_simulation
 import os
 
-NUM_ROUNDS = 10 # Number of rounds of training
-NUM_PARTITIONS = 100 # Number of clients
-FRACTION_FIT = 0.1  # 10% clients sampled each round to do fit()
-FRACTION_EVALUATION = 0.25  # 25% clients sampled each round to do evaluate()
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--num_rounds", type=int, default=10)
+parser.add_argument("--num_partitions", type=int, default=5)
+parser.add_argument("--fraction_fit", type=float, default=0.1)
+parser.add_argument("--fraction_evaluation", type=float, default=0.25)
+parser.add_argument("--fedavgcustom_file", type=str, default="result_1.json")
+parser.add_argument("--performance_file", type=str, default="result_2.json")
+parser.add_argument("--result_file", type=str, default="result.json")
+args = parser.parse_args()
+
+NUM_ROUNDS = args.num_rounds
+NUM_PARTITIONS = args.num_partitions
+FRACTION_FIT = args.fraction_fit
+FRACTION_EVALUATION = args.fraction_evaluation
+
+performance_file = args.fedavgcustom_file
+fedavgcustom_file = args.performance_file
+result_file = args.result_file
+#OUTPUT_FILE = args.output
+
+#NUM_ROUNDS = 5 # Number of rounds of training
+#NUM_PARTITIONS = 100 # Number of clients
+#FRACTION_FIT = 0.1  # 10% clients sampled each round to do fit()
+#FRACTION_EVALUATION = 0.25  # 25% clients sampled each round to do evaluate()
+
 
 # This caches MNIST locally
-mnist = load_dataset("ylecun/mnist", cache_dir="./data/huggingface", download_mode="force_redownload")
+mnist = load_dataset("ylecun/mnist", cache_dir="./data/huggingface")
 os.environ["HF_DATASETS_CACHE"] = "./data/huggingface"
 os.environ["HF_DATASETS_OFFLINE"] = "1"
 
@@ -68,8 +90,9 @@ class FedAvgCustom(FedAvg):
         acc = [100.0 * metrics["accuracy"] for metrics in self.metrics_list]
         plt.plot(round, acc)
         plt.grid()
-        plt.ylabel("Accuracy (%)")
-        plt.xlabel("Round")
+        plt.title("MNIST") 
+        plt.ylabel("Test accuracy (%)")
+        plt.xlabel("Communication rounds")
         plt.savefig("./output/mnist_accuracy_plot.pdf")  # Or any other filename/path
         plt.close()   
 
@@ -81,9 +104,14 @@ class FedAvgCustom(FedAvg):
         self.metrics_list.append(metrics)
         # If last round, save results and make a plot
         if server_round == self.num_rounds:
-            # Save to CSV
-            with open(f"{self.file_name}.json", "w") as f:
-                json.dump({"loss": self.loss_list, "metrics": self.metrics_list}, f)
+
+            metadata = {
+                "loss": round(loss, 3),
+                "metrics": metrics
+            }
+            #performance_file = './output/mnist_decentralized_performance.json'
+            # Save to JSON
+            utils.store_result(metadata, performance_file)
             # Generate plot
             self._make_plot()
 
@@ -103,7 +131,6 @@ def get_evaluate_fn(testloader):
         # call test (evaluate model as in centralised setting)
         loss, accuracy = test(model, testloader, device)
         return loss, {"accuracy": accuracy}
-
     return evaluate_fn
 
 def train(net, trainloader, optimizer, device="cpu"):
@@ -154,6 +181,7 @@ class FlowerClient(NumPyClient):
         train(self.model, self.trainloader, optim, self.device)
         # return the model parameters to the server as well as extra info (number of training examples in this case)
         return get_params(self.model), len(self.trainloader), {}
+    
     def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
         """Evaluate the model sent by the server on this client's
         local validation set. Then return performance metrics."""
@@ -230,33 +258,18 @@ run_simulation(
     server_app=server_app, client_app=client_app, num_supernodes=NUM_PARTITIONS
 )
 
-end_time = time.time()
-elapsed_time = end_time - start_time
-print(f"Total running time: {elapsed_time:.2f} seconds")
 # Save the results to json
 # Define metadata
 metadata = {
-    "run_time": f"{round(elapsed_time, 2)} seconds",
+    "run_time": f"{round(time.time() - start_time, 2)} seconds",
     "num_clients": NUM_PARTITIONS,
     "num_rounds": NUM_ROUNDS,
     "fraction_fit": FRACTION_FIT,
     "fraction_evaluate": FRACTION_EVALUATION,
 }
-# Combine metadata with results
-#combined_data = {**metadata, **results}
-# Check if the file exists
-output_file = "./output/mnist_decentralized_fedavgcustom.json"
-if os.path.exists(output_file):
-    # If the file exists, read the existing data, append, and save
-    with open(output_file, "r") as f:
-        existing_data = json.load(f)
-    # Append new data
-    existing_data.append(metadata)
-    # Save the combined data back to the file
-    with open(output_file, "w") as f:
-        json.dump(existing_data, f, indent=2)
-else:
-    # If the file doesn't exist, create a new one with the combined data
-    with open(output_file, "w") as f:
-        json.dump([metadata], f, indent=2)
+
+utils.store_result(metadata, fedavgcustom_file)
+utils.combined_result(fedavgcustom_file, performance_file, result_file)
+
+
 

@@ -91,34 +91,19 @@ def main():
     start_time = time.time()
     # Run the centralised training
     loss, accuracy = run_centralised(trainloader, testloader, epochs=NUM_EPOCHS, lr=0.01)
-    elapsed_time = time.time() - start_time
-    print(f"Total running time: {elapsed_time:.2f} seconds")
     print("Finished training")
-    # Save NUM_EPOCHS and elapsed_time to a file
-    metadata = {
-        "run_time": f"{round(elapsed_time, 2)} seconds",
-        "final_loss": round(loss, 2),
-        "final_accuracy": accuracy,
-        "batch_size": 32,
-        "learning_rate": 0.01,
-        "num_epochs": NUM_EPOCHS,
-    }
-    # Check if the file exists
+    # Save results to a JSON file
     output_file = "./output/mnist_centralized.json"
-    if os.path.exists(output_file):
-        # If the file exists, read the existing data, append, and save
-        with open(output_file, "r") as f:
-            existing_data = json.load(f)
-        # Append new data
-        existing_data.append(metadata)
-        # Save the combined data back to the file
-        with open(output_file, "w") as f:
-            json.dump(existing_data, f, indent=2)
-    else:
-        # If the file doesn't exist, create a new one with the combined data
-        with open(output_file, "w") as f:
-            json.dump([metadata], f, indent=2)
-
+    metadata = {
+            "run_time": f"{round(time.time() - start_time, 2)} seconds",
+            "final_loss": round(loss, 2),
+            "final_accuracy": accuracy,
+            "batch_size": 32,
+            "learning_rate": 0.01,
+            "num_epochs": NUM_EPOCHS,
+    }
+    utils.store_result(metadata, output_file)
+    
 
 if __name__ == "__main__":
     main()
