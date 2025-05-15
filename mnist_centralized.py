@@ -7,7 +7,7 @@ import time
 import torch.nn as nn
 import torch.nn.functional as F
 
-NUM_EPOCHS = 3
+NUM_EPOCHS = 20
 
 class Net(nn.Module):
     def __init__(self, num_classes: int) -> None:
