@@ -19,6 +19,8 @@ import matplotlib.pyplot as plt
 from datasets import load_dataset
 from flwr.simulation import run_simulation
 import os
+import warnings
+warnings.filterwarnings('ignore')
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -26,9 +28,9 @@ parser.add_argument("--num_rounds", type=int, default=10)
 parser.add_argument("--num_partitions", type=int, default=5)
 parser.add_argument("--fraction_fit", type=float, default=0.1)
 parser.add_argument("--fraction_evaluation", type=float, default=0.25)
-parser.add_argument("--fedavgcustom_file", type=str, default="result_1.json")
-parser.add_argument("--performance_file", type=str, default="result_2.json")
-parser.add_argument("--result_file", type=str, default="result.json")
+parser.add_argument("--fedavgcustom_file", type=str, default="./output/result_1.json")
+parser.add_argument("--performance_file", type=str, default="./output/result_2.json")
+parser.add_argument("--result_file", type=str, default="./output/result.json")
 args = parser.parse_args()
 
 NUM_ROUNDS = args.num_rounds
@@ -232,7 +234,7 @@ def server_fn(context: Context):
     _, testloader = utils.get_mnist_dataloaders(mnist, batch_size=32)
     # Define the strategy
     strategy = FedAvgCustom(
-        file_name="results_fedavgcustom",
+        file_name="./output/results_fedavgcustom",
         num_rounds=NUM_ROUNDS,
         fraction_fit= FRACTION_FIT,  # 10% clients sampled each round to do fit()
         fraction_evaluate=FRACTION_EVALUATION,  # 25% clients sample each round to do evaluate()
