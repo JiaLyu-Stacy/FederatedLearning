@@ -18,40 +18,40 @@ if select_config == 1:
     # Config A: Baseline
     config_type = "Full_participation"
     num_rounds_list = [3, 5, 10, 20, 30, 50, 100, 200]      
-    #num_rounds_list = [200]          
-    num_partitions_list = [200]         
+    num_partitions_list = [10, 100, 200]          
+    num_partitions_list = [500]         
     fraction_fit_list = [1.0] 
     fraction_eval_list = [1.0] 
 elif select_config == 2:
     # Config B: Partial Participation (Realistic Simulation)
     config_type = "Partial_participation"
     num_rounds_list = [3, 5, 10, 20, 30, 50, 100, 200]  
-    #num_rounds_list = [200]               
-    num_partitions_list = [200]         
+    num_partitions_list = [10, 100, 200]                 
+    num_partitions_list = [500]         
     fraction_fit_list = [0.3] 
     fraction_eval_list = [0.3] 
 elif select_config == 3:
     # Config C: Low Eval, High Train
     config_type = "LowEval_HighTrain"
     num_rounds_list = [3, 5, 10, 20, 30, 50, 100, 200]               
-    #num_rounds_list = [200]  
-    num_partitions_list = [200]         
+    num_partitions_list = [10, 100, 200]  
+    num_partitions_list = [500]         
     fraction_fit_list = [0.8] 
     fraction_eval_list = [0.2] 
 elif select_config == 4:
     # Config D: High Eval, Low Train
     config_type = "HighEval_LowTrain"
     num_rounds_list = [3, 5, 10, 20, 30, 50, 100, 200]               
-    #num_rounds_list = [200]  
-    num_partitions_list = [200]         
+    num_partitions_list = [10, 100, 200]   
+    num_partitions_list = [500]         
     fraction_fit_list = [0.3] 
     fraction_eval_list = [0.9] 
 elif select_config == 5:
     # Config E: Short Training Horizon
     config_type = "Short_Train"
     num_rounds_list = [3, 5, 10, 20, 30, 50, 100, 200]               
-    #num_rounds_list = [200]  
-    num_partitions_list = [200]         
+    num_partitions_list = [10, 100, 200]   
+    num_partitions_list = [500]         
     fraction_fit_list = [0.5] 
     fraction_eval_list = [0.5] 
 else:
