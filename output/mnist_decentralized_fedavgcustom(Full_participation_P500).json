@@ -1,0 +1,50 @@
+[
+  {
+    "loss": 719.749,
+    "metrics": {
+      "accuracy": 0.101
+    }
+  },
+  {
+    "loss": 718.799,
+    "metrics": {
+      "accuracy": 0.155
+    }
+  },
+  {
+    "loss": 709.376,
+    "metrics": {
+      "accuracy": 0.2253
+    }
+  },
+  {
+    "loss": 687.301,
+    "metrics": {
+      "accuracy": 0.3955
+    }
+  },
+  {
+    "loss": 712.047,
+    "metrics": {
+      "accuracy": 0.2205
+    }
+  },
+  {
+    "loss": 661.984,
+    "metrics": {
+      "accuracy": 0.5107
+    }
+  },
+  {
+    "loss": 164.491,
+    "metrics": {
+      "accuracy": 0.8482
+    }
+  },
+  {
+    "loss": 60.716,
+    "metrics": {
+      "accuracy": 0.9432
+    }
+  }
+]
